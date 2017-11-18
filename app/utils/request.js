@@ -1,4 +1,6 @@
 import 'whatwg-fetch';
+import { isObject, get, merge } from 'lodash';
+// import { URL } from 'url';
 
 /**
  * Parses the JSON returned by a network request
@@ -34,13 +36,32 @@ function checkStatus(response) {
 /**
  * Requests a URL, returning a promise
  *
- * @param  {string} url       The URL we want to request
+ * @param  {string} url The url we want to request
  * @param  {object} [options] The options we want to pass to "fetch"
- *
+ * @param  {boolean} httpResponse If return the http response or the parsed response
  * @return {object}           The response data
  */
-export default function request(url, options) {
-  return fetch(url, options)
-    .then(checkStatus)
-    .then(parseJSON);
+export default function request(url, options, httpResponse = false) {
+  const accessToken = localStorage.getItem(process.env.ACCESS_TOKEN_KEY);
+  // eslint-disable-next-line no-param-reassign
+  url = isObject(url) ? url : new window.URL(url, process.env.BASE_URL);
+
+
+  const opts = merge(options, {
+    mode: 'cors',
+    headers: {
+      'Content-Type': 'application/json',
+    } });
+
+  if (accessToken) {
+    opts.headers.Authorization = accessToken;
+  }
+
+  if (get(opts, 'body')) {
+    opts.body = JSON.stringify(opts.body);
+  }
+
+  const promise = fetch(url, opts).then(checkStatus);
+
+  return httpResponse ? promise : promise.then(parseJSON);
 }

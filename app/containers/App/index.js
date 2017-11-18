@@ -7,9 +7,12 @@
  */
 
 import React from 'react';
-import { Helmet } from 'react-helmet';
+// import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 import { Switch, Route } from 'react-router-dom';
+
+import AuthRoute from 'containers/Core/Authentication/AuthRoute';
+import Login from 'containers/Core/Authentication/Login/Loadable';
 
 import HomePage from 'containers/HomePage/Loadable';
 import FeaturePage from 'containers/FeaturePage/Loadable';
@@ -26,20 +29,24 @@ const AppWrapper = styled.div`
   flex-direction: column;
 `;
 
+
 export default function App() {
+  // const { history } = this.props;
+
   return (
     <AppWrapper>
-      <Helmet
+      {/*      <Helmet
         titleTemplate="%s - React.js Boilerplate"
         defaultTitle="React.js Boilerplate"
       >
         <meta name="description" content="A React.js Boilerplate application" />
-      </Helmet>
+      </Helmet> */}
       <Header />
       <Switch>
-        <Route exact path="/" component={HomePage} />
-        <Route path="/features" component={FeaturePage} />
-        <Route path="" component={NotFoundPage} />
+        <AuthRoute exact path="/" component={HomePage} />
+        <Route path="/login" component={Login} />
+        <AuthRoute path="/features" component={FeaturePage} />
+        <AuthRoute path="" component={NotFoundPage} />
       </Switch>
       <Footer />
     </AppWrapper>

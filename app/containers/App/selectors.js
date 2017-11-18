@@ -6,7 +6,9 @@ import { createSelector } from 'reselect';
 
 const selectGlobal = (state) => state.get('global');
 
-const selectRoute = (state) => state.get('route');
+const selectRoute = (state) => {
+  state.get('route');
+};
 
 const makeSelectCurrentUser = () => createSelector(
   selectGlobal,
@@ -28,9 +30,23 @@ const makeSelectRepos = () => createSelector(
   (globalState) => globalState.getIn(['userData', 'repositories'])
 );
 
+/* Routing */
+
 const makeSelectLocation = () => createSelector(
   selectRoute,
   (routeState) => routeState.get('location').toJS()
+);
+
+/* Logging */
+
+const makeSelectIsLoggedIn = () => createSelector(
+  selectGlobal,
+  (globalState) => globalState.getIn(['login', 'isLoggedIn'])
+);
+
+const makeSelectRedirectURL = () => createSelector(
+  selectGlobal,
+  (globalState) => globalState.getIn(['login', 'redirectURL']) || '/'
 );
 
 export {
@@ -40,4 +56,6 @@ export {
   makeSelectError,
   makeSelectRepos,
   makeSelectLocation,
+  makeSelectIsLoggedIn,
+  makeSelectRedirectURL,
 };

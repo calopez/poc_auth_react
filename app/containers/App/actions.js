@@ -19,6 +19,7 @@ import {
   LOAD_REPOS,
   LOAD_REPOS_SUCCESS,
   LOAD_REPOS_ERROR,
+  SET_REDIRECT_URL,
 } from './constants';
 
 /**
@@ -59,5 +60,19 @@ export function repoLoadingError(error) {
   return {
     type: LOAD_REPOS_ERROR,
     error,
+  };
+}
+
+/**
+ * Dispatched before verify if user is logged in
+ *
+ * @param  {string} url The URL the user was directed to
+ *
+ * @return {object}   An action object with a type of SET_REDIRECT_URL passing the url
+ */
+export function setRedirectURL(url) {
+  return {
+    type: SET_REDIRECT_URL,
+    url,
   };
 }
